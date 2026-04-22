@@ -23,17 +23,28 @@ const userRouter = require("./routes/user.js");
 
 const dbUrl = process.env.ATLASDB_URL;
 
-main()
-  .then(() => {
-    console.log("connected to DB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// main()
+//   .then(() => {
+//     console.log("connected to DB");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 async function main() {
-  await mongoose.connect(dbUrl);
+  try {
+    await mongoose.connect(dbUrl);
+    console.log("connected to DB");
+  } catch (err) {
+    console.error("DB connection failed:", err);
+    process.exit(1);
+  }
 }
+main();
+
+// async function main() {
+//   await mongoose.connect(dbUrl);
+// }
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
