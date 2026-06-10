@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
   require('dotenv').config();
 }
 
@@ -12,7 +12,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
-const flash = require("connect-flash"); 
+const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
@@ -104,20 +104,21 @@ app.use((req, res, next) => {
 //   res.send(registeredUser);
 // });
 
-  app.use("/listings", listingRouter);
-  app.use("/listings/:id/reviews", reviewRouter); 
-  app.use("/", userRouter);
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page not found!"))
 });
 
 app.use((err, req, res, next) => {
-  let {statusCode = 500, message = "message went wrong!"} = err;
+  let { statusCode = 500, message = "message went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });
   // res.status(statusCode).send(message);
 });
 
-app.listen(8080, () => {
-  console.log("server is listening to port 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`server is listening to port ${port}`);
 });
