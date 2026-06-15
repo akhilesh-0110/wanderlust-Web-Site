@@ -1,6 +1,10 @@
-if (process.env.NODE_ENV != "production") {
-  require('dotenv').config();
-}
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
+dns.setDefaultResultOrder('ipv4first');
+
+// if (process.env.NODE_ENV != "production") {
+//   require('dotenv').config();
+// }
 
 const express = require("express");
 const app = express();
@@ -21,37 +25,23 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
+if (process.env.NODE_ENV != "production") {
+  require('dotenv').config();
+}
+
 const dbUrl = process.env.ATLASDB_URL;
 
-// main()
-//   .then(() => {
-//     console.log("connected to DB");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+main()
+  .then(() => {
+    console.log("connected to DB");
+  })
+  .catch((err) => {
+    console.log("DB connection error:", err);
+  });
 
 async function main() {
-  try {
-    await mongoose.connect(dbUrl);
-    console.log("connected to DB");
-  } catch (err) {
-    console.error("DB connection failed:", err);
-    process.exit(1);
-  }
+  await mongoose.connect(dbUrl);
 }
-main();
-
-// async function main() {
-//   await mongoose.connect(dbUrl);
-// }
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);
-app.use(express.static(path.join(__dirname, "/public")));
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
@@ -60,6 +50,21 @@ const store = MongoStore.create({
   },
   touchAfter: 24 * 3600,
 });
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
+
+// const store = MongoStore.create({
+//   mongoUrl: dbUrl,
+//   crypto: {
+//     secret: process.env.SECRET,
+//   },
+//   touchAfter: 24 * 3600,
+// });
 
 store.on("error", (err) => {
   console.log("ERROR in MONGO SESSION STORE", err);
