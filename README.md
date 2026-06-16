@@ -86,28 +86,6 @@ An Airbnb-inspired full-stack web application that allows users to discover, cre
 * Method Override
 * Dotenv
 
----
-
-## 📸 Screenshots
-
-### 🏠 Home Page
-
-Airbnb-inspired homepage featuring destination search, category filters, and responsive navigation.
-
----
-
-### 👤 Sign Up Page
-
-Users can create an account securely through the registration form.
-
----
-
-### 🔐 Login Page
-
-Registered users can securely log in and access platform features.
-
-log in page---
-
 ## 📂 Project Structure
 
 ```bash
